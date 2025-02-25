@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: flask-chatbot
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -b 0.0.0.0:10000 app:app"
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false  # Render 대시보드에서 직접 입력
+    plan: free  # 무료 플랜 사용
