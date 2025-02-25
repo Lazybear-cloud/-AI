@@ -1,1 +1,1 @@
-# -AI
+# -sung-gong-gado AI
