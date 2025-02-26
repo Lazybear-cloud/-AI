@@ -4,6 +4,7 @@ import openai
 import os
 
 app = Flask(__name__)
+CORS(app) # 전체 도메인에서의 요청 허용
 
 # ✅ 환경 변수에서 OpenAI API Key 가져오기 (Render에서 자동으로 설정됨)
 openai.api_key = os.getenv("OPENAI_API_KEY")
