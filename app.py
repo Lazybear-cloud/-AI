@@ -4,14 +4,14 @@ import openai
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/analyze": {"origins": "https://sunggonggado.com"}})
+CORS(app, resources={r"/analyze": {"origins": "*"}})  # 운영 시 "https://sunggonggado.com"으로 제한
 
 # OpenAI API 키 설정 (환경 변수에서 가져오기)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/", methods=["GET"])
 def home():
-    return "Flask 서버 정상 작동 중! 프롬프트 입력"
+    return "Flask 서버 정상 작동 중! 프롬프트 입력123"
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
@@ -65,20 +65,21 @@ def analyze():
         📍 **리스크:** (추가 확인이 필요한 사항)  
 
         ## **📌 경매 물건 정보**
-        {auction_data}
+        {auction_text}
         """
-        
-        # 최신 OpenAI API 방식 적용
-        client = openai.OpenAI()
-        response = client.chat.completions.create(
-            model="gpt-4o",
+
+        # OpenAI API 호출
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": "당신은 부동산 경매 권리분석 전문가입니다. 사용자가 입력한 부동산 경매 물건을 분석해 주세요."},
-                {"role": "user", "content": auction_text}
-            ]
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.2,
+            max_tokens=3000
         )
 
-        result = response.choices[0].message.content
+        result = response["choices"][0]["message"]["content"]
         return jsonify({"result": result})
 
     except Exception as e:
