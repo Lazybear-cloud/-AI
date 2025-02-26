@@ -25,7 +25,7 @@ def analyze():
         # 최신 OpenAI API 방식 적용
         client = openai.OpenAI()
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "사용자가 입력한 부동산 경매 물건을 분석해 주세요."},
                 {"role": "user", "content": auction_text}
