@@ -11,7 +11,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/", methods=["GET"])
 def home():
-    return "Flask 서버 정상 작동 중!ㅁㄴㅇ"
+    return "Flask 서버 정상 작동 중! 좀 가보자"
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
