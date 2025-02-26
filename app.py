@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/analyze": {"origins": "https://sunggonggado.com"}})
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # 환경 변수에서 API 키 가져오기
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/", methods=["GET"])
 def home():
@@ -21,7 +21,7 @@ def analyze():
         if not auction_text:
             return jsonify({"error": "No text provided"}), 400
 
-        # OpenAI API 호출
+        # OpenAI API 최신 버전 코드 적용
         response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=[
@@ -30,11 +30,11 @@ def analyze():
             ]
         )
 
-        result = response["choices"][0]["message"]["content"]
+        result = response.choices[0].message.content
         return jsonify({"result": result})
 
     except Exception as e:
-        print("🔥 서버 오류 발생:", str(e))  # 콘솔에 오류 출력 (Render Logs에서 확인 가능)
+        print("🔥 서버 오류 발생:", str(e))  # 오류 로그 출력
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
