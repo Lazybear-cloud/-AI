@@ -4,7 +4,7 @@ import openai
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/analyze": {"origins": "https://sunggonggado.com/수익률-계산기"}})
+CORS(app)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
