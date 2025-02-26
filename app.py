@@ -21,7 +21,7 @@ def analyze():
         if not auction_text:
             return jsonify({"error": "No text provided"}), 400
 
-        # OpenAI API 최신 버전 코드 적용
+        # OpenAI API 최신 버전 코드
         response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=[
@@ -30,11 +30,13 @@ def analyze():
             ]
         )
 
-        result = response.choices[0].message.content
+        result = response.choices[0].message["content"]
         return jsonify({"result": result})
 
     except Exception as e:
-        print("🔥 서버 오류 발생:", str(e))  # 오류 로그 출력
+        import traceback
+        error_message = traceback.format_exc()
+        print("🔥 서버 오류 발생:\n", error_message)  # Render 로그에 오류 출력
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
