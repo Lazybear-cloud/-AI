@@ -1,33 +1,24 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import openai
 import os
 
 app = Flask(__name__)
-CORS(app) # 전체 도메인에서의 요청 허용
+CORS(app)  # 모든 도메인에서 요청 허용
 
-# ✅ 환경 변수에서 OpenAI API Key 가져오기 (Render에서 자동으로 설정됨)
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-@app.route("/")
-def home():
-    return "Flask 챗봇 서버가 실행 중입니다! 🚀"
-
-@app.route("/chatbot", methods=["POST"])
-def chatbot():
+# ✅ 경매 물건 분석 엔드포인트
+@app.route("/analyze-auction", methods=["POST"])
+def analyze_auction():
     try:
         data = request.get_json()
-        if not data or "message" not in data:
+        if not data or "auction_info" not in data:
             return jsonify({"error": "잘못된 요청 형식"}), 400  # 400 Bad Request
 
-        user_input = data["message"]
+        auction_info = data["auction_info"]
+        
+        # (예제) 분석 결과 생성 (실제 로직 적용 가능)
+        analysis_result = f"경매 분석 결과: '{auction_info}'에 대한 평가 완료."
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": user_input}]
-        )
-
-        return jsonify({"response": response["choices"][0]["message"]["content"]})
+        return jsonify({"analysis_result": analysis_result}), 200
 
     except Exception as e:
         print(f"❌ 서버 오류 발생: {e}")
