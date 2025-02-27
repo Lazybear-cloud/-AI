@@ -11,7 +11,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/", methods=["GET"])
 def home():
-    return "Flask 서버 정상 작동 중! 프롬프트 다시 없앰"
+    return "Flask 서버 정상 작동 중!"
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
@@ -22,7 +22,7 @@ def analyze():
         if not auction_text or len(auction_text) < 10:
             return jsonify({"result": "경매 물건의 위치, 감정가, 근저당 여부 등의 정보를 포함하여 입력해 주세요."})
         
-        # 최신 OpenAI API 방식 적용
+        # OpenAI API 호출
         client = openai.OpenAI()
         response = client.chat.completions.create(
             model="gpt-4o",
@@ -32,17 +32,10 @@ def analyze():
             ]
         )
 
-        result = response.choices[0].message.content
+        # OpenAI에서 반환된 순수 텍스트
+        result = response.choices[0].message.content.strip()
         
-        # HTML로 반환할 결과 생성
-        result_html = f"""
-        <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #ddd;">
-            <h3>경매 분석 결과</h3>
-            <p>{result}</p>
-        </div>
-        """
-        
-        return jsonify({"result": result_html})
+        return jsonify({"result": result})  # HTML 없이 텍스트만 반환
 
     except Exception as e:
         import traceback
